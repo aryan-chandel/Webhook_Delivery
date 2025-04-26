@@ -17,6 +17,7 @@ func main() {
 	go service.StartLogRententionWorker()
 	routes.RegisterRoutes(e)
 	e.POST("/ingest/:sub_id", controllers.NewDelivery(), middleware.VerifySignature())
+	//demo endpoint for engine testing
 	e.GET("/ping", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{"message": "status working"})
 	})
