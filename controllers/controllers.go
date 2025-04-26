@@ -78,6 +78,10 @@ func AddSubscriber() echo.HandlerFunc {
 			log.Println("subscriber binding fails")
 			return c.JSON(http.StatusBadRequest, echo.Map{"error": "cannot bind user check your fields"})
 		}
+		if sub.TargetURL==""{
+			log.Println("target url missing")
+			return c.JSON(http.StatusBadRequest, echo.Map{"error": "target_url is required"})
+		}
 		sub.ID = primitive.NewObjectID()
 		sub.CreatedAt = time.Now()
 		sub.UpdatedAt = time.Now()
@@ -231,6 +235,11 @@ func NewDelivery() echo.HandlerFunc {
 			log.Println("subscription id is missing in URL")
 			return c.JSON(http.StatusNotFound, echo.Map{"error": "id is missing "})
 		}
+		eventType := c.Request().Header.Get("Event-Type") //  Get event type
+        if eventType == "" {
+			log.Println("event type missing ")
+            return c.JSON(http.StatusBadRequest, map[string]string{"error": "Event-Type header missing"})
+        }
 		payload, er := io.ReadAll(c.Request().Body)
 		if er != nil {
 			log.Println("task body missing")
@@ -243,6 +252,21 @@ func NewDelivery() echo.HandlerFunc {
 			log.Println("subscriber not found")
 			return c.JSON(http.StatusBadRequest, echo.Map{"error": "subscription not found"})
 		}
+		allowed := false
+        if len(sub.EventTypes) == 0 {
+            allowed = true // If no event types specified, allow all
+        } else {
+            for _, event := range sub.EventTypes {
+                if event == eventType {
+                    allowed = true
+                    break
+                }
+            }
+        }
+
+        if !allowed {
+            return c.JSON(http.StatusForbidden, map[string]string{"error": "event type not allowed for this subscription"})
+        }
 		//create new delivery
 		var NewDel models.DeliveryLog
 		NewDel.ID = primitive.NewObjectID()

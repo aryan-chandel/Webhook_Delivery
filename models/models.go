@@ -11,6 +11,7 @@ type Subscriber struct {
 	SubscriptionID string             `bson:"sub_id" json:"sub_id"`
 	TargetURL      string             `bson:"target_url" json:"target_url"`
 	Secret         string             `bson:"secret,omitempty" json:"secret,omitempty"`
+	EventTypes     []string            `bson:"event_types,omitempty" json:"event_types,omitempty"`
 	CreatedAt      time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt      time.Time          `bson:"updated_at" json:"updated_at"`
 }
