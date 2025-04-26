@@ -14,7 +14,7 @@ import (
 func VerifySignature() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			subscriptionID := c.Param("sub_id")
+			subscriptionID := c.Param("id")
 
 			// 1. Get subscription from cache or DB
 			sub, err := controllers.GetSubscriptionByID(subscriptionID)
@@ -44,7 +44,7 @@ func VerifySignature() echo.MiddlewareFunc {
 			computedSig := service.ComputeHMAC(bodyBytes, sub.Secret)
 
 			//6.verify signature
-			if strings.ToLower(computedSig) != strings.ToLower(receivedSig) {
+			if !strings.EqualFold(computedSig, receivedSig) {
 				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "invalid signature"})
 			}
 
