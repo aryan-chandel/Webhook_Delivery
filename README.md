@@ -121,8 +121,11 @@ However, if the usage goes beyond the free tier (e.g., higher traffic or storage
 -I can share these files feel free to ask..
 -However due to lack of javascript knowledge it may behave incorrectly depending on complex requests .
 
-### Implemented all bonus points as well as required points with efficient approach
-### Full backend system is built and tested by me if any issues come I can assure it will surely be deployment or any typo error we can resolve feel free to ask :)
+## Implemented all bonus points as well as required points with efficient approach.
+
+-avoid clicking direct links from readme file and copy full curl commands.
+-I will be runnning my ec2 instance for week or 10 days if anyhow it public dns doesnt work kindly ask me to restart my instance i will do so .. :) 
+# Full backend system is built and tested by me if any issues come I can assure it will surely be deployment or any typo error we can resolve feel free to ask :)
 
 Thank you..
 
