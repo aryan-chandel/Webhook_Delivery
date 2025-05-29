@@ -68,66 +68,6 @@ curl -i -X POST http://localhost:8000/ingest/<SUB_ID_you_saved> \
 5) curl http://localhost:8000/subscription/logs/<subscription_id> -->this will give the logs of intended subscriber
 6) curl -X DELETE http://localhost:8000/subscriptions/<subscription_id> --> this will show success message of deletion of subscriber
 
-   **LIVE LINK OF AWS DEPLOYED PROJECT:
-   public dns :ec2-54-163-172-191.compute-1.amazonaws.com  //just use this dns in place of localhost like curl http://ec2-54-163-172-191.compute-1.amazonaws.com:8000/ping and all set you can test like that
-   public ipv4: 54.163.172.191 //you can use this ip in place of dns also..
-   You can also test all endpoints through postman using these public dns or ip..
-
-***ABOUT ARCHITECTURE AND DATABASE :
-    - **Framework**: This application is built using the [Echo](https://echo.labstack.com/) framework for Go, which is lightweight, fast, and provides middleware support.
-                     Also echo provides more easier functions and libraries to handle http requests and responses effectively.
-                     Another reason for choosing is easy threading just use go keyword and boom no more bottlenecks, waiting time ..New thread is generated.
-    - **Database**: MongoDB is used as the primary database to store subscription details and delivery logs.
-                    Due to its nosql architecture and our schema less user data it is best choice.
-                    Secondary REDIS is used for caching data and handling background worker to complete delivery tasks..
-    - **Async Task/Queueing System**: Redis is used to handle queuing for the webhook deliveries. This ensures that the delivery attempts can be retried asynchronously in case of failure.
-    - **Retry Strategy**: The system retries webhook delivery up to a specified maximum number of attempts, with a delay between each attempt. This is managed through Redis as the queue.
-    - **Log Retention : Also setup a background go routine to keep deleting logs older than 72 hours.. 
-### Database Schema & Indexing Strategy
-
-#### Collections
-- **Subscriptions**: Contains details about each subscription (e.g., event type, secret, address).
-- **Logs**: Stores logs for each delivery attempt, including the webhook ID, response status, and any failure messages.
-
-#### Indexing:
-- Indexing is applied to frequently queried fields, such as:
-  - `subscription_id`
-  - `webhook_id`
-  - `status`
-  
-MongoDB indexes ensure efficient searching for logs and status retrieval.
-
-###Estimated Monthly Cost
-    AWS Free Tier
-    Assuming the following services:
-    EC2 Instance (t2.micro): Free tier allows 750 hours/month.
-    S3 (for storage, if used): Free tier includes 5GB.
-    MongoDB: MongoDB Atlas offers a free tier with 512MB storage.
-            Or mongodb is running locally on ec2 machine under free tier time range 
-    Redis: Redis can be run on EC2, which is part of the free tier for t2.micro.
-
-Assumptions:
-
-5000 Webhooks/day.
-1.2 delivery attempts/webhook.
-The monthly cost would be approximately $0, assuming the usage fits within the free tier limits for EC2, S3.
-However, if the usage goes beyond the free tier (e.g., higher traffic or storage), the cost can grow depending on the AWS services' pricing.
-
-
-### 'Final note'
--A minimal ui also deployed on aws ec2 through Apache server which can be accessed through provided public dns or ip.
--it is made with html ,tailwind css and javascript and with some help of ai tool like chat-GPT..
--I have not included these files in main project repo to keep it backend oriented and keep less size of docker image.
--I can share these files feel free to ask..
--However due to lack of javascript knowledge it may behave incorrectly depending on complex requests .
-
-## Implemented all bonus points as well as required points with efficient approach.
-
--avoid clicking direct links from readme file and copy full curl commands.
--I will be runnning my ec2 instance for week or 10 days if anyhow it public dns doesnt work kindly ask me to restart my instance i will do so .. :) 
-# Full backend system is built and tested by me if any issues come I can assure it will surely be deployment or any typo error we can resolve feel free to ask :)
-
-Thank you..
 
     
 
